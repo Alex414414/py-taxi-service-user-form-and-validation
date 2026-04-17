@@ -14,7 +14,10 @@ class DriverCreateForm(UserCreationForm):
         fields = UserCreationForm.Meta.fields + ("license_number",)
 
     def clean_license_number(self):
-        license_number = self.cleaned_data["license_number"]
+        license_number = self.cleaned_data.get("license_number")
+
+        if not license_number:
+            raise forms.ValidationError("License number is required")
 
         if len(license_number) != 8:
             raise forms.ValidationError(
@@ -39,7 +42,10 @@ class DriverLicenseUpdateForm(forms.ModelForm):
         fields = ("license_number",)
 
     def clean_license_number(self):
-        license_number = self.cleaned_data["license_number"]
+        license_number = self.cleaned_data.get("license_number")
+
+        if not license_number:
+            raise forms.ValidationError("License number is required")
 
         if len(license_number) != 8:
             raise forms.ValidationError(
